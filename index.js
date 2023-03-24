@@ -5,6 +5,7 @@ const child_process = require('child_process');
 
 const jarPath = process.argv[2] || './jars';
 const outputDir = process.argv[3] || './output/';
+const reRun = process.argv[4] || false;
 path.resolve(__dirname, outputDir);
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
@@ -48,27 +49,31 @@ function runJAR(jar, currentOutputDir, input) {
 }
 
 // ReRun jars that have samples where they were not run
-for (file of fs.readdirSync(outputDir)) {
-    const currentOutputDir = path.resolve(outputDir, file);
-    if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
-        let files = fs.readdirSync(currentOutputDir);
-        const input = fs.readFileSync(path.resolve(currentOutputDir, "index.txt"));
-        let foundOne = false;
-        for (jar of jarFiles) {
-            let found = false;
-            for (file of files) {
-                if (file.endsWith(jar.replace(".jar", ".out"))) {
-                    found = true;
-                    break;
+
+if (reRun) {
+    console.log("ReRunning JARs");
+    for (file of fs.readdirSync(outputDir)) {
+        const currentOutputDir = path.resolve(outputDir, file);
+        if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
+            let files = fs.readdirSync(currentOutputDir);
+            const input = fs.readFileSync(path.resolve(currentOutputDir, "index.txt"));
+            let foundOne = false;
+            for (jar of jarFiles) {
+                let found = false;
+                for (file of files) {
+                    if (file.endsWith(jar.replace(".jar", ".out"))) {
+                        found = true;
+                        break;
+                    }
                 }
-            }
-            if (!found) {
-                if (!foundOne) {
-                    console.log();
-                    console.log(`ReRunning input ${currentOutputDir}`);
+                if (!found) {
+                    if (!foundOne) {
+                        console.log();
+                        console.log(`ReRunning input ${currentOutputDir}`);
+                    }
+                    foundOne = true;
+                    runJAR(jar, currentOutputDir, input);
                 }
-                foundOne = true;
-                runJAR(jar, currentOutputDir, input);
             }
         }
     }
