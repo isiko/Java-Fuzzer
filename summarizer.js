@@ -1,11 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const validateOutput = require('./generator/validateOutput');
 
 const outputDir = process.argv[2] || './output';
 
 const directorys = fs.readdirSync(outputDir);
+console.log('Searching in output directory: ' + path.resolve(__dirname, outputDir));
 
-jars = ['SirYoshi', 'isiko404'];
 let counter = 0;
 let invalid = 0;
 let different = 0;
@@ -19,7 +20,8 @@ for (dir in directorys) {
         if (files[file].endsWith('.out')) {
             let hash = files[file].split('.')[0];
             let content = fs.readFileSync(path.join(outputDir, directorys[dir], files[file]), 'utf8');
-            if (content.startsWith('Error')) {
+
+            if (!validateOutput(content)) {
                 invalid++;
                 continue;
             }
