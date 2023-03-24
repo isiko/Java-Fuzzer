@@ -32,6 +32,48 @@ if (jarFiles.length == 0) {
     return;
 }
 
+function runJAR(jar, currentOutputDir, input) {
+    console.log(`Running JAR ${jar}`);
+    const date = Date.now();
+    const output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, { 
+        timeout: 1000 * 60 * 5,    // 5 Minutes in ms
+        cwd: currentOutputDir,     // Working directory
+        input: input,              // Input
+        stdio: [null, null, null]  // Don't print anything in the console
+    });
+    const outputHash = crypto.createHash('sha256').update(output).digest('hex');
+    let outputFile = path.resolve(currentOutputDir, outputHash + "." +  jar.replace(".jar", ".out"));
+    console.log(`Finished JAR ${jar} in ${Date.now() - date}ms -> ${outputHash}`);
+    fs.writeFileSync(outputFile, output);
+}
+
+// ReRun jars that have samples where they were not run
+for (file of fs.readdirSync(outputDir)) {
+    const currentOutputDir = path.resolve(outputDir, file);
+    if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
+        let files = fs.readdirSync(currentOutputDir);
+        const input = fs.readFileSync(path.resolve(currentOutputDir, "index.txt"));
+        let foundOne = false;
+        for (jar of jarFiles) {
+            let found = false;
+            for (file of files) {
+                if (file.endsWith(jar.replace(".jar", ".out"))) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                if (!foundOne) {
+                    console.log();
+                    console.log(`ReRunning input ${currentOutputDir}`);
+                }
+                foundOne = true;
+                runJAR(jar, currentOutputDir, input);
+            }
+        }
+    }
+}
+
 while (true) {
     console.log();
     // Generate Input
@@ -54,25 +96,15 @@ while (true) {
     }
 
     // Write Input
-    console.log(`Writing Inputs to ${currentOutputDir}`);
+    console.log(`Writing Inputs`);
     fs.mkdirSync(path.resolve(outputDir, hash));
     for (file of inputFiles) {
         fs.writeFileSync(path.resolve(currentOutputDir, file.name), file.content);
     }
+    fs.writeFileSync(path.resolve(currentOutputDir, "index.txt"), input);
 
-    // Generate Outputs
+    console.log(`Running input ${currentOutputDir}`);
     for (jar of jarFiles) {
-        console.log(`Running JAR ${jar}`);
-        const date = Date.now();
-        const output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, { 
-            timeout: 1000 * 60 * 5,    // 5 Minutes in ms
-            cwd: currentOutputDir,     // Working directory
-            input: input,              // Input
-            stdio: [null, null, null]  // Don't print anything in the console
-        });
-        const outputHash = crypto.createHash('sha256').update(output).digest('hex');
-        let outputFile = path.resolve(currentOutputDir, outputHash + "." +  jar.replace(".jar", ".out"));
-        console.log(`Finished JAR ${jar} in ${Date.now() - date}ms -> ${outputHash}`);
-        fs.writeFileSync(outputFile, output);
+        runJAR(jar, currentOutputDir, input);
     }
 }
