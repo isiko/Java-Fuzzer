@@ -1,14 +1,21 @@
-function randomBoolean(){
-    return Math.random() < 0.5;
-}
+// The following code is used to generate the input files for the JARs
+// The function should return an array of objects with the following structure:
+// {
+//      name: "filename.txt",
+//      content: "file content",
+// }  
+// Only the parameters show above are used by the rest of the Code, so you can add additional parameters if you want.
+// The function should not write any files to the disk.
 
-function randomInt(min, max){
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Should return an Array of Objects representing the input files
-// Each Object should have a name and some content
 function generateFiles() {
+    // Some Helper Functions
+    function randomBoolean(){
+        return Math.random() < 0.5;
+    }
+
+    function randomInt(min, max){
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     let crossingAmount = randomInt(2, 10);
     let streetAmount = randomInt(crossingAmount, crossingAmount * 4);
 

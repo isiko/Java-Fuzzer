@@ -1,3 +1,7 @@
+// This function is called by the generator to validate the input.
+// It should return true if the input is valid and false if it is not.
+// The Parameters are exactly the output of the corresponding generators.
+
 function validateInput(input, files) {
     let crossings = files[0].raw;
     let streets = files[1].raw;
