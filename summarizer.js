@@ -35,6 +35,9 @@ for (dir in directorys) {
         console.log('Found multiple hashes for ' + directorys[dir]);
         different++;
     }
+    if (hashes.length == 0) {
+        invalid++;
+    }
 }
 console.log('Total:     ' + counter);
 console.log('Invalid:   ' + invalid);
