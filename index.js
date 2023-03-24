@@ -51,8 +51,12 @@ function runJAR(jar, currentOutputDir, input) {
 // ReRun jars that have samples where they were not run
 
 if (reRun) {
-    console.log("ReRunning JARs");
-    for (file of fs.readdirSync(outputDir)) {
+    let completedFiles = []
+    while (completedFiles.length < fs.readdirSync(outputDir).length) {
+        console.log();
+        let files = fs.readdirSync(outputDir);
+        let file = files[Math.floor(Math.random() * files.length-1)];
+        completedFiles.push(file);
         const currentOutputDir = path.resolve(outputDir, file);
         if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
             let files = fs.readdirSync(currentOutputDir);
@@ -68,13 +72,17 @@ if (reRun) {
                 }
                 if (!found) {
                     if (!foundOne) {
-                        console.log();
                         console.log(`ReRunning input ${currentOutputDir}`);
                     }
                     foundOne = true;
                     runJAR(jar, currentOutputDir, input);
                 }
             }
+            if (!foundOne) {
+                console.log(`Skipping (Allready done)`);
+            }
+        } else {
+            console.log("Skipping (No index.txt)");
         }
     }
 }
