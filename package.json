@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node . JARs output",
-    "reRun": "node . output output true",
+    "reRun": "node . JARs output true",
     "summarize": "node summarizer.js output"
   },
   "author": "",
