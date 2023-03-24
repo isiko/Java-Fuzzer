@@ -26,9 +26,14 @@ Save the JARs to `JARs/SOLUTION.jar` in the directory of the Fuzzer.
 
 ### Run the script
 Run the script using the following command:
-> npm start
+```Bash
+npm start
+```
 
 If the script can't find you JARs, check if they are in the correct directory. The script should create the one it is searching in if it didn't exist, so check if you find any empty directories.
 
 ### Check for differences
 Run the script `summarizer.js` to get a summary of your results. It should show you in which samples there are differences, as well as an overview of how many samples where generated and how many differences it found.
+```Bash
+npm summarize
+```

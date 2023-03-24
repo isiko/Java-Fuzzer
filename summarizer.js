@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const outputDir = process.argv[2];
+const outputDir = process.argv[2] || './output';
 
 const directorys = fs.readdirSync(outputDir);
 

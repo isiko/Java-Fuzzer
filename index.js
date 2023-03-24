@@ -4,9 +4,13 @@ const crypto = require('crypto');
 const child_process = require('child_process');
 
 const jarPath = process.argv[2] || './jars';
-const outputDir = path.resolve(__dirname, 'output');
+const outputDir = process.argv[3] || './output/';
+path.resolve(__dirname, outputDir);
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
+}
+if (!fs.existsSync(jarPath)) {
+    fs.mkdirSync(jarPath);
 }
 console.log(`Output directory: ${outputDir}`);
 console.log(`JAR path: ${jarPath}`);
