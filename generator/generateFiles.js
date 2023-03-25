@@ -90,8 +90,8 @@ function mutate_network(network, street_density) {
 function generate_street_attributes(network, double_lane_weight) {
     let new_streets = [];
     for (let [i, street] of network[1].entries()) {
-        let n = randomIntFromInterval(10, 10000);
-        length = Math.ceil(n / (Math.log(n) * 2));
+        let length = randomIntFromInterval(40, 200);
+        // length = Math.ceil(n / (Math.log(n) * Math.log(n)));
         let lanes = 1;
         if (Math.random() < double_lane_weight) {
             lanes = 2;
@@ -104,7 +104,7 @@ function generate_street_attributes(network, double_lane_weight) {
 
 
 function generateFiles() {
-    let number_of_crossings = randomIntFromInterval(20, 200);
+    let number_of_crossings = randomIntFromInterval(20, 100);
     let street_density = Math.random();
     let double_lane_weight = Math.random();
     let car_density = Math.random();
