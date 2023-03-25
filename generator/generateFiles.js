@@ -132,6 +132,7 @@ function generateFiles() {
             if (Math.random() < car_density) {
                 carsString += `${car_id},${i},${randomIntFromInterval(20, 40)},${randomIntFromInterval(1, 10)}\n`;
                 cars.push(car_id);
+                car_id++;
 
             }
         }

@@ -3,7 +3,7 @@
 
 function generateInput(files) {
     let output = "load .\nsimulate 10000\n";
-    for (car of files[2].raw) {
+    for (let car of files[2].raw) {
         output += `position ${car}\n`;
     }
     output += "quit";
