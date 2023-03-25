@@ -7,6 +7,17 @@
 // Only the parameters show above are used by the rest of the Code, so you can add additional parameters if you want.
 // The function should not write any files to the disk.
 
+const min_crossings = 20;
+const max_crossings = 100;
+const min_street_length = 40;
+const max_street_length = 200;
+const min_speedlimit = 5;
+const max_speedlimit = 40;
+const min_car_speed = 20;
+const max_car_speed = 40;
+const min_car_acceleration = 1;
+const max_car_acceleration = 10;
+
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
@@ -15,8 +26,6 @@ function shuffleArray(array) {
         array[j] = temp;
     }
 }
-
-
 
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -90,13 +99,13 @@ function mutate_network(network, street_density) {
 function generate_street_attributes(network, double_lane_weight) {
     let new_streets = [];
     for (let [i, street] of network[1].entries()) {
-        let length = randomIntFromInterval(40, 200);
+        let length = randomIntFromInterval(min_street_length, max_street_length);
         // length = Math.ceil(n / (Math.log(n) * Math.log(n)));
         let lanes = 1;
         if (Math.random() < double_lane_weight) {
             lanes = 2;
         }
-        let max_speed = randomIntFromInterval(5, 40);
+        let max_speed = randomIntFromInterval(min_speedlimit, max_speedlimit);
         new_streets.push([street[0], street[1], length, lanes, max_speed]);
     }
     return [network[0], new_streets];
@@ -104,11 +113,11 @@ function generate_street_attributes(network, double_lane_weight) {
 
 
 function generateFiles() {
-    let number_of_crossings = randomIntFromInterval(20, 100);
-    let street_density = Math.random();
-    let double_lane_weight = Math.random();
-    let car_density = Math.random();
-    let round_about_density = Math.random();
+    const number_of_crossings = randomIntFromInterval(min_crossings, max_crossings);
+    const street_density = Math.random();
+    const double_lane_weight = Math.random();
+    const car_density = Math.random();
+    const round_about_density = Math.random();
 
     let streets = '';
     let crossings = '';
@@ -130,7 +139,7 @@ function generateFiles() {
     for (let [i, street] of network[1].entries()) {
         for (let j = 0; j < street[2]; j += 10) {
             if (Math.random() < car_density) {
-                carsString += `${car_id},${i},${randomIntFromInterval(20, 40)},${randomIntFromInterval(1, 10)}\n`;
+                carsString += `${car_id},${i},${randomIntFromInterval(min_car_speed, max_car_speed)},${randomIntFromInterval(min_car_acceleration, max_car_acceleration)}\n`;
                 cars.push(car_id);
                 car_id++;
 
