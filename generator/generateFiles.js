@@ -104,11 +104,11 @@ function generate_street_attributes(network, double_lane_weight) {
 
 
 function generateFiles() {
-    let number_of_crossings = 4;
-    let street_density = 0.3;
-    let double_lane_weight = 1;
-    let car_density = 0.1;
-    let round_about_density = 1;
+    let number_of_crossings = randomIntFromInterval(20, 200);
+    let street_density = Math.random();
+    let double_lane_weight = Math.random();
+    let car_density = Math.random();
+    let round_about_density = Math.random();
 
     let streets = '';
     let crossings = '';
