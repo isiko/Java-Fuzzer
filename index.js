@@ -59,7 +59,6 @@ if (reRun) {
         console.log();
         let files = fs.readdirSync(outputDir);
         let file = files[Math.floor(Math.random() * files.length - 1)];
-        let file = files[Math.floor(Math.random() * files.length-1)];
         if (completedFiles.includes(file)) {
             continue;
         }
