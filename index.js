@@ -99,7 +99,8 @@ while (true) {
     console.log("Generating Input");
     const inputFiles = generateFiles();
     const input = generateInput(inputFiles);
-    const hash = crypto.createHash('sha256').update(inputFiles[0].content).update(inputFiles[1].content).update(inputFiles[2].content).digest('hex');
+    const hashInput = inputFiles.map(file => file.content).join("");
+    const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
     console.log(`Generated Input (Hash: ${hash})`);
 
     // // Validate Input
@@ -126,4 +127,5 @@ while (true) {
     for (jar of jarFiles) {
         runJAR(jar, currentOutputDir, input);
     }
+    break;
 }
