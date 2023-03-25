@@ -36,12 +36,15 @@ if (jarFiles.length == 0) {
 function runJAR(jar, currentOutputDir, input) {
     console.log(`Running JAR ${jar}`);
     const date = Date.now();
-    const output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, {
-        timeout: 1000 * 60 * 5,    // 5 Minutes in ms
-        cwd: currentOutputDir,     // Working directory
-        input: input,              // Input
-        stdio: [null, null, null]  // Don't print anything in the console
-    });
+    let output;
+    try {
+        output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, {
+            timeout: 1000 * 60 * 5,    // 5 Minutes in ms
+            cwd: currentOutputDir,     // Working directory
+            input: input,              // Input
+            stdio: [null, null, null]  // Don't print anything in the console
+        });
+    } catch (err) { output = err.stderr.toString() }
     const outputHash = crypto.createHash('sha256').update(output).digest('hex');
     let outputFile = path.resolve(currentOutputDir, outputHash + "." + jar.replace(".jar", ".out"));
     console.log(`Finished JAR ${jar} in ${Date.now() - date}ms -> ${outputHash}`);
