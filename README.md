@@ -35,5 +35,5 @@ If the script can't find you JARs, check if they are in the correct directory. T
 ### Check for differences
 Run the script `summarizer.js` to get a summary of your results. It should show you in which samples there are differences, as well as an overview of how many samples where generated and how many differences it found.
 ```Bash
-npm summarize
+npm run summarize
 ```
