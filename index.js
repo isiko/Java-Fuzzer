@@ -20,7 +20,7 @@ console.log(`JAR path: ${jarPath}`);
 console.log("Loading Generators");
 const generateFiles = require('./generator/generateFiles');
 const generateInput = require('./generator/generateInput');
-const validateInput = require('./generator/validateInput');
+// const validateInput = require('./generator/validateInput');
 
 // Load JARs
 console.log(`Loading JARs from ${path.resolve(jarPath)}`);
@@ -36,14 +36,14 @@ if (jarFiles.length == 0) {
 function runJAR(jar, currentOutputDir, input) {
     console.log(`Running JAR ${jar}`);
     const date = Date.now();
-    const output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, { 
+    const output = child_process.execSync(`java -jar ${path.resolve(jarPath, jar)}`, {
         timeout: 1000 * 60 * 5,    // 5 Minutes in ms
         cwd: currentOutputDir,     // Working directory
         input: input,              // Input
         stdio: [null, null, null]  // Don't print anything in the console
     });
     const outputHash = crypto.createHash('sha256').update(output).digest('hex');
-    let outputFile = path.resolve(currentOutputDir, outputHash + "." +  jar.replace(".jar", ".out"));
+    let outputFile = path.resolve(currentOutputDir, outputHash + "." + jar.replace(".jar", ".out"));
     console.log(`Finished JAR ${jar} in ${Date.now() - date}ms -> ${outputHash}`);
     fs.writeFileSync(outputFile, output);
 }
@@ -55,7 +55,7 @@ if (reRun) {
     while (completedFiles.length < fs.readdirSync(outputDir).length) {
         console.log();
         let files = fs.readdirSync(outputDir);
-        let file = files[Math.floor(Math.random() * files.length-1)];
+        let file = files[Math.floor(Math.random() * files.length - 1)];
         completedFiles.push(file);
         const currentOutputDir = path.resolve(outputDir, file);
         if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
@@ -96,11 +96,11 @@ while (true) {
     const hash = crypto.createHash('sha256').update(inputFiles[0].content).update(inputFiles[1].content).update(inputFiles[2].content).digest('hex');
     console.log(`Generated Input (Hash: ${hash})`);
 
-    // Validate Input
-    if (!validateInput(input, inputFiles)) {
-        console.log("Skipping Input (Invalid)");
-        continue;
-    }
+    // // Validate Input
+    // if (!validateInput(input, inputFiles)) {
+    //     console.log("Skipping Input (Invalid)");
+    //     continue;
+    // }
 
     const currentOutputDir = path.resolve(outputDir, hash);
     if (fs.existsSync(currentOutputDir)) {
