@@ -129,5 +129,4 @@ while (true) {
     for (jar of jarFiles) {
         runJAR(jar, currentOutputDir, input);
     }
-    break;
 }
