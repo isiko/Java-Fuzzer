@@ -4,9 +4,7 @@
 const os = require("os");
 
 function unifyOutput(output) {
-    console.log(output);
     let outputLines = output.split(os.EOL);
-    console.log(outputLines);
     for (let i = 0; i < outputLines.length; i++) {
         if (outputLines[i].startsWith("Error:")) {
             outputLines[i] = "Error: <Error Message>";
