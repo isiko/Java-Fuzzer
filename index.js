@@ -56,6 +56,9 @@ if (reRun) {
         console.log();
         let files = fs.readdirSync(outputDir);
         let file = files[Math.floor(Math.random() * files.length-1)];
+        if (completedFiles.includes(file)) {
+            continue;
+        }
         completedFiles.push(file);
         const currentOutputDir = path.resolve(outputDir, file);
         if (fs.existsSync(path.resolve(currentOutputDir, "index.txt"))) {
