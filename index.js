@@ -93,7 +93,7 @@ while (true) {
     console.log("Generating Input");
     const inputFiles = generateFiles();
     const input = generateInput(inputFiles);
-    const hash = crypto.createHash('sha256').update(input).update(inputFiles.toString()).digest('hex');
+    const hash = crypto.createHash('sha256').update(inputFiles[0].content).update(inputFiles[1].content).update(inputFiles[2].content).digest('hex');
     console.log(`Generated Input (Hash: ${hash})`);
 
     // Validate Input
